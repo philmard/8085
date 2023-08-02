@@ -1,0 +1,47 @@
+
+LXI B,01F4H
+CHECK:
+	LDA 2000H
+	CPI C8H	;elegxos gia >=200
+	JNC GTR200	
+	CPI 64H	;elegxos gia >=100
+	JNC GTR100
+	MVI E,FFH	;E=-1
+	
+DECA:
+	INR E		;E=0
+	SUI 0AH	;kane A-10 mexri A<0
+	JNC DECA
+
+	ADI 0AH	;diorthosi tou A gia na vroume tis monades
+	MOV D,A 	;D = MONADES
+
+	MOV A,E 	;A = DEKADES
+	RLC		;metakinoume tis dekades sto MSB
+	RLC
+	RLC
+	RLC
+	ADD D 		;pleon A = Dekades Monades
+	CMA 		;ta LED einai antistrofhs logikhs
+	STA 3000H	;fortwnoume thn timh sta LED
+	JMP CHECK
+	
+GTR200:
+	MVI A,0FH	;? = 0000 1111
+	STA 3000H	;4 MSB LED = ON
+	CALL DELB	
+	MVI A,FFH	;A = 0000 0000
+	STA 3000H	;OFF
+	CALL DELB
+	JMP CHECK	; check an allakse kapoios diakoptis
+
+GTR100:
+	MVI A,F0H	;A = 1111 0000
+	STA 3000H	;4 LSB LED = ON
+	CALL DELB	
+	MVI A,FFH	;A = 0000 0000
+	STA 3000H	;OFF
+	CALL DELB
+	JMP CHECK	; check an allakse kapoios diakoptis
+
+	END

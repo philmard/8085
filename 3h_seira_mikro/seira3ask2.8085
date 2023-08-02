@@ -1,0 +1,75 @@
+       IN 10H
+START:	
+	LXI H,0A00H		
+	MVI M,10H		;do not show 1-4 display digits
+	INX H					
+	MVI M,10H		
+	INX H			
+	MVI M,10H		
+	INX H			
+	MVI M,10H	
+
+THRESHOLD:
+	MVI D,28H		;D = K1 = 28H(40 decimal)
+	MVI E,78H		;E = K2 = 78H(120 decimal)
+	
+	INR D			;to include =
+	INR E			;to include =
+	
+	MVI A,0DH		;enable interrupts
+	SIM			
+	EI
+	
+WAIT:
+	JMP WAIT		;wait for interrupt
+
+INTR_ROUTINE:
+	POP H
+	CALL KIND		;keybord input
+	MOV B,A		;B->LS Digit
+	CALL KIND		;keybord input
+	MOV C,A		;C->MS Digit
+
+	LXI H,0A04H
+	MOV M,B		;0A04H<--LS Digit
+	INX H		
+	MOV M,C		;0A05H<--MS Digit
+	
+COMPARE:
+	MOV A,C
+	RLC
+	RLC
+	RLC
+	RLC
+	ADD B
+	MOV B,A		;B=hex number
+	
+	MOV A,B
+	CMP D
+	JC FIRST
+	MVI E,78H
+	CMP E
+	JC SECOND
+	
+	MVI A,04H
+	CMA
+	STA 3000H		;open 3rd LED
+	JMP LCD
+FIRST:
+	MVI A,01H
+	CMA
+	STA 3000H		;open 1st LED
+	JMP LCD
+SECOND:
+	MVI A,02H
+	CMA
+	STA 3000H		;open 2nd LED
+	JMP LCD	
+LCD:
+	LXI D,0A00H		
+	CALL STDM
+	EI			;enable interrupts again
+OUT:
+	CALL DCD
+	JMP OUT
+END

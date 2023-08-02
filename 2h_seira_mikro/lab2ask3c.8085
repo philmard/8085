@@ -1,0 +1,150 @@
+
+START:
+	IN 10H	
+
+L1:
+	MVI A,FEH	; arxikopoihsh tou A = 1h grammh
+	STA 2800H
+	LDA 1800H	; diavase sthlh
+	MVI B,07H
+	ANA B		; 3LSB
+	MVI C,86H	; INSTR STEP
+	CPI 06H
+	JZ DISPLAY
+	MVI C,85H	; FETCH PC
+	CPI 05H
+	JZ DISPLAY
+L2:
+	MVI A,FDH	; A = 2h grammh
+	STA 2800H
+	LDA 1800H	; diavase sthlh
+	MVI B,07H
+	ANA B		; 3LSB
+	MVI C,84H	; RUN
+	CPI 06H
+	JZ DISPLAY
+	MVI C,80H	; FETCH REG
+	CPI 05H
+	JZ DISPLAY
+	MVI C,82H	; FETCH ADRS
+	CPI 03H
+	JZ DISPLAY
+
+L3:
+	MVI A,FBH	; A = 3h grammh
+	STA 2800H
+	LDA 1800H	; diavase sthlh
+	MVI B,07H
+	ANA B		; 3LSB
+	MVI C,00H	; 0
+	CPI 06H
+	JZ DISPLAY
+	MVI C,83H	; STORE/INCR
+	CPI 05H
+	JZ DISPLAY
+	MVI C,81H	; DECR
+	CPI 03H
+	JZ DISPLAY
+L4:
+	MVI A,F7H	; A = 4h grammh
+	STA 2800H
+	LDA 1800H	; diavase sthlh
+	MVI B,07H
+	ANA B		; 3LSB
+	MVI C,01H	; 1
+	CPI 06H
+	JZ DISPLAY
+	MVI C,02H	; 2
+	CPI 05H
+	JZ DISPLAY
+	MVI C,03H	; 3
+	CPI 03H
+	JZ DISPLAY
+L5:
+	MVI A,EFH	; A = 5h grammh
+	STA 2800H
+	LDA 1800H	; diavase sthlh
+	MVI B,07H
+	ANA B		; 3LSB
+	MVI C,04H	; 4
+	CPI 06H
+	JZ DISPLAY
+	MVI C,05H	; 5
+	CPI 05H
+	JZ DISPLAY
+	MVI C,06H	; 6
+	CPI 03H
+	JZ DISPLAY
+L6:
+	MVI A,DFH	; A = 6h grammh
+	STA 2800H
+	LDA 1800H	; diavase sthlh
+	MVI B,07H
+	ANA B		; 3LSB
+	MVI C,07H	; 7
+	CPI 06H
+	JZ DISPLAY
+	MVI C,08H	; 8
+	CPI 05H
+	JZ DISPLAY
+	MVI C,09H	; 9
+	CPI 03H
+	JZ DISPLAY
+L7:
+	MVI A,BFH	; A = 7h grammh
+	STA 2800H
+	LDA 1800H	; diavase sthlh
+	MVI B,07H
+	ANA B		; 3LSB
+	MVI C,0AH	; A
+	CPI 06H
+	JZ DISPLAY
+	MVI C,0BH	; B
+	CPI 05H
+	JZ DISPLAY
+	MVI C,0CH	; C
+	CPI 03H
+	JZ DISPLAY
+L8:
+	MVI A,7FH	; A = 8h grammh
+	STA 2800H
+	LDA 1800H	; diavase sthlh
+	MVI B,07H
+	ANA B		; 3LSB
+	MVI C,0DH	; D
+	CPI 06H
+	JZ DISPLAY
+	MVI C,0EH	; E
+	CPI 05H
+	JZ DISPLAY
+	MVI C,0FH	; F
+	CPI 03H
+	JZ DISPLAY
+JMP START
+
+
+
+DISPLAY:
+	LXI H,0924H	; 5o (ari8misi apo ta deksia) pshfio
+	MOV A,C	; A=code
+	ANI 0FH	; 4 LSB
+	MOV M,A	; apothikeush 4 LSB tou code (eg. if code=86 -> now: Block=060000)
+	
+	INX H		; 6o pshfio
+	MOV A,C
+	ANI F0H	; 4 MSB
+	RLC
+	RLC
+	RLC
+	RLC		; metakinhsh sta 4 LSB
+	MOV M,A	; apothikeush 4 MSB tou code (eg. if code=86 -> now: Block=860000)
+	
+	LXI D,0920H	; dieuthunsh mhnumatos
+	
+	CALL STDM	; metakinisi mhnumatos
+	CALL DCD	; emfanish mhnumatos
+	JMP START	; diavase epomeno mhnuma
+
+
+END
+	

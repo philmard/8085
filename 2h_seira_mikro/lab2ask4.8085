@@ -1,0 +1,60 @@
+	IN 10H
+START1:
+	LDA 2000H
+	LXI H,0928H
+	MVI C,09H
+START:
+	DCR L
+	DCR C
+	RRC
+	MVI M,00H
+	JZ X3		; Z=0 and
+	JNC START	; C=0
+	MVI M,01H
+	JNZ START
+
+			; here, memory is correct
+X3:
+	LDA 0920H
+	LXI H,0921H
+	XRA M		; X3 etoimo
+	MOV C,A	; antigrafo X3 for X2
+	RLC
+	RLC
+	RLC
+	MOV B,A	; antigrafo me swsth 8esh X3
+	
+X2:
+	LDA 0922H
+	LXI H,0923H
+	XRA M
+	ORA C
+	RLC
+	RLC
+	ADD B
+	MOV B,A	; corrected B for X3X2 here
+	
+X1:
+	LDA 0924H
+	LXI H,0925H
+	ANA M
+	MOV C,A	; antigrafo X1 for X0
+	RLC
+	ADD B
+	MOV B,A
+
+X0:
+	LDA 0926H
+	LXI H,0927H
+	ANA M
+	ORA C
+	ADD B
+	
+	CMA
+	STA 3000H
+	JMP START1
+
+END
+
+
+	

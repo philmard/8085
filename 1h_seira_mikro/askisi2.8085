@@ -1,0 +1,30 @@
+IN 10H
+LXI B,01F4H       ;delay=500ms
+MVI E,FEH         ;E=11111110
+
+CHECK:
+	LDA 2000H  ;load dip switches to A
+	CALL DELB  ;using delay of 500ms
+	RRC        ;rotate right to check CY
+	JNC CHECK  ;if LSB dip switch is OFF
+
+	RLC        ;gurnaw se arxikh katastash
+	RLC        ;check MSB (fora kinhshs)
+	JC RIGHT   ;if CY=1 -> deksiostrofh kinhsh LED
+		    ;alliws  -> aristerostrogh kinhsh LED
+
+LEFT:
+	MOV A,E    ;prohgoumeno state twn LED
+	STA 3000H
+	RLC        ;kinhsh mia thesi aristera
+	MOV E,A    ;krataw kainouria katastasi sto E
+	JMP CHECK
+
+RIGHT:
+	MOV A,E    ;prohgoumeno state twn LED
+	STA 3000H
+	RRC        ;kinhsh mia thesi deksia
+	MOV E,A    ;krataw kainouria katastasi sto E
+	JMP CHECK
+
+	END

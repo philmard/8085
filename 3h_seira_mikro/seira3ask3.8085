@@ -1,0 +1,52 @@
+FILL MACRO RP, X, K
+    PUSH PSW
+    PUSH B          ; Save BC on the stack
+    
+    MOV B, X        ; Move the length (X) to B register
+    MVI C, K        ; Load the constant value (K) to C register
+    
+    L1:             ; Loop label
+        MOV M, C    ; Store the constant value (K) at the memory location pointed by RP
+        INX RP      ; Increment RP (BC, DE, or HL) to point to the next memory location
+        DCR B       ; Decrement the length counter
+        JNZ L1      ; Jump back to L1 if the length counter is not zero
+    
+    POP B           ; Restore BC from the stack
+    POP PSW
+    ENDM
+
+
+
+RHLR MACRO
+	PUSH PSW	; Save the PSW on the stack
+	PUSH H
+	MOV A,H	; Move the value of register H to the accumulator
+	RRC		; Rotate the accumulator right through Carry (CY)
+	MOV H,A	; Move the modified value back to register H
+	MOV A,L	; Move the value of register L to the accumulator
+	RRC		; Rotate the accumulator right through Carry (CY)
+	MOV L,A	; Move the modified value back to register L
+	POP H
+	POP PSW	; Restore the PSW from the stack
+ENDM
+
+
+SWAP_Nibble MACRO Q
+    PUSH PSW          ; Save the PSW on the stack
+
+    MOV A, M          
+    RRC               ; Rotate the accumulator right through Carry (CY)
+    RRC               ; Repeat for a total of four times
+    RRC
+    RRC
+    MOV M, A          ; Move the modified value back to register M
+    MOV A, Q          
+    RLC               ; Rotate the accumulator left through Carry (CY)
+    RLC               ; Repeat for a total of four times
+    RLC
+    RLC
+
+    MOV Q, A          ; Move the modified value back to register Q
+
+    POP PSW           ; Restore the PSW from the stack
+ENDM

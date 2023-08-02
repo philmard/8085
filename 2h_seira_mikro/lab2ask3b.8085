@@ -1,0 +1,69 @@
+
+START:
+	CALL KIND	; A is now pressed number
+	CPI 00H	
+	JZ OTHER	; if A=0, close all LED's
+	CPI 09H
+	JNC OTHER	; if A>=9, close all LED's
+	JMP OPEN_LEDS	; here, 1<=A<=8
+
+OTHER: 		; Non valid number, close all LED's
+	MVI A,FFH
+	STA 3000H
+	JMP START	; and get another number
+
+OPEN_LEDS:		; compare with 1-8 and open corresponding LED's
+	CPI 08H
+	JZ OPEN8
+	CPI 07H
+	JZ OPEN7
+	CPI 06H
+	JZ OPEN6
+	CPI 05H
+	JZ OPEN5
+	CPI 04H
+	JZ OPEN4
+	CPI 03H
+	JZ OPEN3
+	CPI 02H
+	JZ OPEN2
+	CPI 01H
+	JZ OPEN1
+
+OPEN8:
+	MVI A,7FH
+	STA 3000H
+	JMP START
+OPEN7:
+	MVI A,3FH
+	STA 3000H
+	JMP START
+OPEN6:
+	MVI A,1FH
+	STA 3000H
+	JMP START
+OPEN5:
+	MVI A,0FH
+	STA 3000H
+	JMP START
+OPEN4:
+	MVI A,07H
+	STA 3000H
+	JMP START
+OPEN3:
+	MVI A,03H
+	STA 3000H
+	JMP START
+OPEN2:
+	MVI A,01H
+	STA 3000H
+	JMP START
+OPEN1:
+	MVI A,00H
+	STA 3000H
+	JMP START
+
+END
+
+
+

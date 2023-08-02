@@ -1,0 +1,29 @@
+START:
+	LDA 2000H 	; dip switches input
+	MVI C,FFH	; arxikopoihsh Count=-1.*
+	MVI B,00H	
+	CMP B		; check if all switches are OFF
+	JNZ COUNT_INR	; if at least one switch is ON, continue
+			; else
+	MVI A,FFH	; close LED's
+	STA 3000H	; close LED's
+	JMP START	; check dip switches again
+
+COUNT_INR:		
+	RRC		
+	INR C		; Count++
+	JC OPEN	; if CY=1, OPEN LED's
+	JMP COUNT_INR
+
+OPEN:			; here, Count has correct value*
+	MVI A,FEH	; 1111 1110
+COUNT_DCR:		; open the correct LED, according to Count
+	DCR C
+	RLC
+	JNZ COUNT_DCR
+	STA 3000H
+	JMP START
+
+END
+
+
