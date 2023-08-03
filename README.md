@@ -1,5 +1,5 @@
 # 8085
-Small Projects in Assembly Programming Language of 8085 for the Course: 
+Small Projects in ``Assembly Programming Language of 8085`` for the Course: 
 [**Microprocessor Systems**](https://www.ece.ntua.gr/en/undergraduate/courses/3046) (6th Semester - ECE|NTUA)
 
 # Περιγραφή Μαθήματος:
