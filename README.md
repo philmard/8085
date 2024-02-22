@@ -1,6 +1,9 @@
 # 8085
 Small Projects in ``Assembly Programming Language of 8085`` for the Course: 
-[**Microprocessor Systems**](https://www.ece.ntua.gr/en/undergraduate/courses/3046) (6th Semester - ECE|NTUA)
+[**Microprocessor Systems**](https://www.ece.ntua.gr/en/undergraduate/courses/3046) (6th Semester - ECE | NTUA)
+
+All the exercises were executed with this 8085 simulator:
+[**TSIK**](http://artemis.cslab.ece.ntua.gr:8080/jspui/bitstream/123456789/13906/1/DT2003-0132.pdf)
 
 # Περιγραφή Μαθήματος:
 
